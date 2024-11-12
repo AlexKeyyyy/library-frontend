@@ -16,7 +16,7 @@ const Clients = () => {
   const fetchClients = async () => {
     try {
       const response = await axios.get("http://localhost:8080/clients");
-      setClients(response.data);
+      setClients(response.data || []);
     } catch (error) {
       console.error("Error fetching clients:", error);
     }
@@ -87,7 +87,7 @@ const Clients = () => {
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Отчество</th>
-            <th>Паспортная серия</th>
+            <th>Серия паспорта</th>
             <th>Номер паспорта</th>
             <th>Действия</th>
           </tr>

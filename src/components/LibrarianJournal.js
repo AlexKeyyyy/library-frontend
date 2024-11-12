@@ -24,8 +24,9 @@ const LibrarianJournal = () => {
 
   const fetchFine = async (journalId) => {
     try {
+      console.log(journalId);
       const response = await axios.post("http://localhost:8080/journal/fine", {
-        journal_id: journalId,
+        journal_id: parseInt(journalId, 10),
       });
       setFine(response.data.fine); // Получаем штраф из ответа
       setReturnJournalId(journalId);
@@ -38,7 +39,7 @@ const LibrarianJournal = () => {
   const fetchJournalEntries = async () => {
     try {
       const response = await axios.get("http://localhost:8080/journal"); // Предполагается, что этот маршрут отображает записи
-      setEntries(response.data);
+      setEntries(response.data || []);
     } catch (error) {
       console.error("Error fetching journal entries:", error);
     }
@@ -47,7 +48,7 @@ const LibrarianJournal = () => {
   const fetchClients = async () => {
     try {
       const response = await axios.get("http://localhost:8080/clients/all");
-      setClients(response.data);
+      setClients(response.data || []);
     } catch (error) {
       console.error("Error fetching clients:", error);
     }
@@ -56,7 +57,8 @@ const LibrarianJournal = () => {
   const fetchBooks = async () => {
     try {
       const response = await axios.get("http://localhost:8080/books/all");
-      setBooks(response.data);
+      setBooks(response.data || []);
+      console.log(books);
     } catch (error) {
       console.error("Error fetching books:", error);
     }
@@ -67,6 +69,7 @@ const LibrarianJournal = () => {
     const formattedDate = new Date(newEntry.date_end)
       .toISOString()
       .split("T")[0];
+    console.log(formattedDate);
 
     console.log("Отправляемые данные:", {
       book_id: newEntry.book_id,
@@ -76,7 +79,7 @@ const LibrarianJournal = () => {
 
     try {
       await axios.post("http://localhost:8080/journal/issue", {
-        book_id: newEntry.book_id,
+        book_id: parseInt(newEntry.book_id, 10),
         client_id: newEntry.client_id,
         date_end: formattedDate,
       });
@@ -104,15 +107,46 @@ const LibrarianJournal = () => {
     }
   };
 
+  // Получение day_count для выбранной книги и расчет даты возврата
+  const handleBookSelect = async (bookId) => {
+    const selectedBook = books.find((book) => book.id === parseInt(bookId, 10));
+    console.log(selectedBook);
+
+    if (selectedBook) {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/book_types/${selectedBook.type_id}`
+        );
+        const { day_count } = response.data;
+
+        const currentDate = new Date();
+        const returnDate = new Date(currentDate);
+        returnDate.setDate(currentDate.getDate() + day_count);
+
+        setNewEntry((prev) => ({
+          ...prev,
+          book_id: bookId,
+          date_end: returnDate.toISOString().split("T")[0], // Форматируем дату
+        }));
+      } catch (error) {
+        console.error("Error fetching day_count:", error);
+      }
+    }
+  };
+
   const handleIssueChange = (e) => {
     const { name, value } = e.target;
-    setNewEntry((prev) => ({
-      ...prev,
-      [name]:
-        name === "client_id" || name === "book_id"
-          ? parseInt(value, 10)
-          : value, // Преобразуем в int
-    }));
+    if (name === "book_id") {
+      handleBookSelect(value);
+    } else {
+      setNewEntry((prev) => ({
+        ...prev,
+        [name]:
+          name === "client_id" || name === "book_id"
+            ? parseInt(value, 10)
+            : value, // Преобразуем в int
+      }));
+    }
   };
 
   return (

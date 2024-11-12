@@ -21,7 +21,7 @@ const Books = () => {
   const fetchBooks = async () => {
     try {
       const response = await axios.get("http://localhost:8080/books");
-      setBooks(response.data);
+      setBooks(response.data || []);
     } catch (error) {
       console.error("Error fetching books:", error);
     }
@@ -30,7 +30,7 @@ const Books = () => {
   const fetchBookTypes = async () => {
     try {
       const response = await axios.get("http://localhost:8080/book_types"); // Путь к типам книг
-      setBookTypes(response.data);
+      setBookTypes(response.data || []);
     } catch (error) {
       console.error("Error fetching book types:", error);
     }
