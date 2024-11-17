@@ -149,6 +149,28 @@ const LibrarianJournal = () => {
     }
   };
 
+  const calculateFine = (dateEnd, finePerDay) => {
+    const now = new Date();
+    const endDate = new Date(dateEnd);
+
+    if (now > endDate) {
+      const daysLate = Math.floor((now - endDate) / (1000 * 60 * 60 * 24));
+      return daysLate * finePerDay;
+    }
+
+    return 0;
+  };
+
+  const handleReturnBook = (entry) => {
+    const fineCalculated = calculateFine(
+      entry.date_end,
+      entry.fine_per_day || 0
+    );
+    setFine(fineCalculated);
+    setReturnJournalId(entry.id);
+    setShowReturnModal(true); // Показываем модальное окно
+  };
+
   return (
     <div>
       <h2>Журнал библиотекаря</h2>
@@ -187,7 +209,9 @@ const LibrarianJournal = () => {
                 <td>{entry.date_beg}</td>
                 <td>{entry.date_end}</td>
                 <td>{entry.date_ret || "Не возвращена"}</td>
-                <td>{entry.fine > 0 ? `${entry.fine} руб.` : `-`}</td>
+                <td>
+                  {entry.fine_today > 0 ? `${entry.fine_today} руб.` : `-`}
+                </td>
                 <td>
                   {entry.date_ret === "Не возвращена" && (
                     <Button
@@ -195,7 +219,7 @@ const LibrarianJournal = () => {
                       onClick={() => {
                         //setReturnJournalId(entry.id);
                         //setShowReturnModal(true);
-                        fetchFine(entry.id);
+                        handleReturnBook(entry);
                       }}
                     >
                       Принять книгу

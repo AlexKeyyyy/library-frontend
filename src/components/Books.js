@@ -98,6 +98,11 @@ const Books = () => {
     }
   };
 
+  const getTypeName = (typeId) => {
+    const type = bookTypes.find((t) => t.id === typeId);
+    return type ? type.type : "Неизвестный тип";
+  };
+
   return (
     <div>
       <h2>Список книг</h2>
@@ -118,7 +123,7 @@ const Books = () => {
             <th>ID</th>
             <th>Название</th>
             <th>Количество</th>
-            <th>Тип ID</th>
+            <th>Тип книги</th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -128,7 +133,7 @@ const Books = () => {
               <td>{book.id}</td>
               <td>{book.name}</td>
               <td>{book.cnt}</td>
-              <td>{book.type_id}</td>
+              <td>{getTypeName(book.type_id)}</td>
               <td>
                 <Button
                   variant="warning"
