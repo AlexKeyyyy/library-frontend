@@ -102,19 +102,23 @@ const Clients = () => {
               <td>{client.passport_seria}</td>
               <td>{client.passport_number}</td>
               <td>
-                <Button
-                  variant="warning"
-                  onClick={() => handleEditClient(client.id)}
-                  className="mr-2"
-                >
-                  Редактировать
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => deleteClient(client.id)}
-                >
-                  Удалить
-                </Button>
+                <div className="d-flex flex-column align-items-start">
+                  <Button
+                    variant="warning"
+                    onClick={() => handleEditClient(client.id)}
+                    className="mb-2"
+                    style={{ width: "200px" }}
+                  >
+                    Редактировать
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteClient(client.id)}
+                    style={{ width: "200px" }}
+                  >
+                    Удалить
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}

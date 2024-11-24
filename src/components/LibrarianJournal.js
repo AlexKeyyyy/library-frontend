@@ -70,6 +70,14 @@ const LibrarianJournal = () => {
       .toISOString()
       .split("T")[0];
     console.log(formattedDate);
+    const selectedDate = new Date(newEntry.date_end);
+    const currentDate = new Date();
+
+    // Проверяем, что выбранная дата не меньше текущей
+    if (selectedDate < currentDate) {
+      alert("Дата окончания не может быть раньше текущей даты!");
+      return;
+    }
 
     console.log("Отправляемые данные:", {
       book_id: newEntry.book_id,
@@ -87,7 +95,11 @@ const LibrarianJournal = () => {
       setShowIssueModal(false);
       setNewEntry({ client_id: "", book_id: "", date_end: "" });
     } catch (error) {
-      console.error("Error issuing book:", error);
+      if (error.response && error.response.data) {
+        alert(`Ошибка: ${error.response.data}`); // Показываем сообщение об ошибке
+      } else {
+        console.error("Error issuing book:", error);
+      }
     }
   };
 
@@ -206,14 +218,26 @@ const LibrarianJournal = () => {
                     : "Не найден"}
                 </td>
                 <td>{book ? book.name : "Не найдено"}</td>
-                <td>{entry.date_beg}</td>
-                <td>{entry.date_end}</td>
-                <td>{entry.date_ret || "Не возвращена"}</td>
+                <td>
+                  {entry.date_beg
+                    ? new Date(entry.date_beg).toISOString().split("T")[0]
+                    : "-"}
+                </td>
+                <td>
+                  {entry.date_end
+                    ? new Date(entry.date_end).toISOString().split("T")[0]
+                    : "-"}
+                </td>
+                <td>
+                  {entry.date_ret
+                    ? new Date(entry.date_ret).toISOString().split("T")[0]
+                    : "Не возвращена"}
+                </td>
                 <td>
                   {entry.fine_today > 0 ? `${entry.fine_today} руб.` : `-`}
                 </td>
                 <td>
-                  {entry.date_ret === "Не возвращена" && (
+                  {!entry.date_ret && (
                     <Button
                       variant="success"
                       onClick={() => {

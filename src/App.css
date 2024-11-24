@@ -2,6 +2,21 @@
   text-align: center;
 }
 
+.logout-button {
+  font-weight: bold;
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.logout-button:hover {
+  background-color: #e40000;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

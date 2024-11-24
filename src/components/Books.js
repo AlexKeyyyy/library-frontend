@@ -135,16 +135,23 @@ const Books = () => {
               <td>{book.cnt}</td>
               <td>{getTypeName(book.type_id)}</td>
               <td>
-                <Button
-                  variant="warning"
-                  onClick={() => handleEditBook(book)}
-                  className="mr-2"
-                >
-                  Редактировать
-                </Button>
-                <Button variant="danger" onClick={() => deleteBook(book.id)}>
-                  Удалить
-                </Button>
+                <div className="d-flex flex-column align-items-start">
+                  <Button
+                    variant="warning"
+                    onClick={() => handleEditBook(book)}
+                    className="mb-2"
+                    style={{ width: "200px" }}
+                  >
+                    Редактировать
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteBook(book.id)}
+                    style={{ width: "200px" }}
+                  >
+                    Удалить
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}

@@ -121,19 +121,23 @@ const BookTypes = () => {
               <td>{type.fine}</td>
               <td>{type.day_count}</td>
               <td>
-                <Button
-                  variant="warning"
-                  onClick={() => handleEditType(type)}
-                  className="mr-2"
-                >
-                  Редактировать
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => deleteBookType(type.id)}
-                >
-                  Удалить
-                </Button>
+                <div className="d-flex flex-column align-items-start">
+                  <Button
+                    variant="warning"
+                    onClick={() => handleEditType(type)}
+                    className="mb-2"
+                    style={{ width: "200px" }}
+                  >
+                    Редактировать
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteBookType(type.id)}
+                    style={{ width: "200px" }}
+                  >
+                    Удалить
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}
