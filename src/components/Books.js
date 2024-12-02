@@ -41,7 +41,11 @@ const Books = () => {
       await axios.delete(`http://localhost:8080/books/${id}`);
       fetchBooks(); // Обновляем список после удаления
     } catch (error) {
-      console.error("Error deleting book:", error);
+      if (error.response && error.response.data) {
+        alert(`Ошибка удаления книги: ${error.response.data}`); // Показываем сообщение об ошибке
+      } else {
+        console.error("Error deleting book:", error);
+      }
     }
   };
 

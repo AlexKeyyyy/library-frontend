@@ -30,7 +30,11 @@ const BookTypes = () => {
       await axios.delete(`http://localhost:8080/book_types/${id}`);
       fetchBookTypes(); // Обновляем список после удаления
     } catch (error) {
-      console.error("Error deleting book type:", error);
+      if (error.response && error.response.data) {
+        alert(`Ошибка удаления типа книги: ${error.response.data}`); // Показываем сообщение об ошибке
+      } else {
+        console.error("Error deleting book type:", error);
+      }
     }
   };
 
